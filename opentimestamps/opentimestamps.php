@@ -1,11 +1,11 @@
 <?php
 /**
  * Plugin Name: Opentimestamps plugin
- * Plugin URI: http://URI_Of_Page_Describing_Plugin_and_Updates
+ * Plugin URI: https://github.com/f2re/wp_opentimestamps
  * Description: Plugin for add shortcode to upload opentimestamps files and verify it.
  * Version: 0.1
  * Author: f2re
- * Author URI: http://URI_Of_The_Plugin_Author
+ * Author URI: https://github.com/f2re/
  * License: GPL2
  */
  
@@ -65,9 +65,9 @@ function opentimestamps_shortcode($atts){
                   <span class="filesize"></span>
                   <p class="hash">
                     <i class="fas fa-upload"></i><br>
-                    Drop here a file to <b>stamp</b><br>
-                    OR<br>
-                    an <i>.ots</i> proof file to <b>verify</b>
+                    Déposez ici un fichier à <b>tamponner</b><br>
+                    OU<br>
+                    un fichier de preuve <i>.ots</i> pour <b>vérifier</b>
                   </p>
                 </div>
                 <input id="opentimestamp_input" type="file" style="display:none">
@@ -75,18 +75,11 @@ function opentimestamps_shortcode($atts){
                   <span class="filename"></span>
                   <span class="filesize"></span>
                   <p class="hash">
-                    <br>Drop here the stamped file
+                    <br>Déposez ici le fichier tamponné
                   </p>
                 </div>
                 <input id="opentimestamp_stamped_input" type="file" style="display:none">
-                <div class="stamp-and-verify-result result result_stamp" id="result_stamp">
-                  <p class="result-description">
-                    The hash is calculated on your browser preserving your privacy. 
-                    Timestamping proof download will start automatically after uploading document.
-                  </p>
-                </div>
                 
-
                 <div class="statuses-container ">
                   <div class="statuses statuses_hashing alert alert-warning" id="statuses" style="display: none">
                     <a href="#" class="statuses-info" style="display: none"></a>

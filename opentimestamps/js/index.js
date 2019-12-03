@@ -24,7 +24,7 @@ function stamp(filename, hash, hashType) {
 		const timestampBytes = ctx.getOutput();
 		download(filename, timestampBytes);
 		Document.progressStop();
-		success('OpenTimestamps receipt created and download started');
+		success('Création du reçu OpenTimestamps et début du téléchargement');
 	}).catch(err => {
 		console.log("err "+err);
 		Document.progressStop();
@@ -72,17 +72,17 @@ function upgrade_verify(ots, hash, hashType, filename) {
                 // check attestations
                 detachedOts.timestamp.allAttestations().forEach(attestation => {
                     if(attestation instanceof OpenTimestamps.Notary.UnknownAttestation){
-                    	warning('Unknown attestation type');
+                    	warning('Type d\'attestation inconnu');
                 	}
             	});
     		} else {
-                warning('Pending attestation');
+                warning('En attente d\'attestation');
 			}
 		} else {
 			var text = "";
 			Object.keys(results).map(chain => {
 				var date = moment(results[chain].timestamp * 1000).tz(moment.tz.guess()).format('YYYY-MM-DD z')
-                text += upperFirstLetter(chain) + ' block ' + results[chain].height + ' attests existence as of ' + date + '<br>';
+                text += upperFirstLetter(chain) + ' pâté de maisons ' + results[chain].height + ' atteste l\'existence au ' + date + '<br>';
     		});
         	success(text);
 		}
@@ -276,7 +276,7 @@ var Document = {
 		if (self.percent > 100) {
 			self.percent = 100;
 		}
-		stamping(self.percent + ' %', 'Stamping')
+		stamping(self.percent + ' %', 'Estampage')
 		}, 100);
 	},
 	progressStop : function(){
@@ -341,7 +341,7 @@ var Proof = {
 		if (this.filename) {
 			$(this.tagId+" .filename").html(this.filename);
 		} else {
-			$(this.tagId+" .filename").html("Unknown name");
+			$(this.tagId+" .filename").html("Nom inconnu");
 		}
 		if (this.filesize) {
 			$(this.tagId+" .filesize").html(" " + humanFileSize(this.filesize, true));
@@ -352,7 +352,7 @@ var Proof = {
         if (Proof.data) {
             var hashType = Proof.getHashType().toUpperCase();
             if (!Hashes.getSupportedTypes().indexOf(hashType) === -1) {
-                failure("Not supported hash type");
+                failure("Type de hachage non supporté");
                 return;
             }
             var hash = Proof.getHash();
@@ -363,7 +363,7 @@ var Proof = {
                 run_verification();
             } else {
                 // Document not uploaded
-                verifying("Upload original stamped data to verify");
+                verifying("Télécharger les données originales estampillées pour vérifier");
             }
         }
 	},
@@ -418,7 +418,7 @@ var Proof = {
             Proof.show();
             Proof.upload(f);
             $('#opentimestamp_stamped').show();
-            $("#result_stamp").hide();
+            // $("#result_stamp").hide();
             // $("#result_verify").show();
         } else {
             Proof.init();
@@ -428,7 +428,7 @@ var Proof = {
             Document.show();
             Document.upload(f);
             $('#opentimestamp_stamped').hide();
-            $("#result_stamp").hide();
+            // $("#result_stamp").hide();
             // $("#result_verify").hide();
         }
 	}
@@ -549,7 +549,7 @@ function run_stamping(){
     if (Hashes.get(hashType)) {
         stamp(Document.filename, Hashes.get(hashType), hashType);
     } else {
-        failure("To <strong>stamp</strong> you need to drop a file in the Data field");
+        failure("Pour <strong>stamp</strong>vous devez déposer un fichier dans le champ Données");
     }
 }
 
@@ -559,17 +559,17 @@ function run_verification(){
 
         var hashType = Proof.getHashType().toUpperCase();
         if (!Hashes.getSupportedTypes().indexOf(hashType) === -1) {
-            failure("Not supported hash type");
+            failure("Type de hachage non supporté");
             return;
         }
         if (!Hashes.get(hashType)){
-            failure("No file to verify; upload one first");
+            failure("Aucun fichier à vérifier ; téléchargez un fichier d'abord");
             return;
         }
         Proof.upgraded = false;
         upgrade_verify(string2Bin(Proof.data), Hashes.get(hashType), hashType, Proof.filename);
     } else {
-        failure("To <strong>verify</strong> you need to drop a file in the Data field and a <strong>.ots</strong> receipt in the OpenTimestamps proof field")
+        failure("Pour <strong>vérifier</strong>vous devez déposer un fichier dans le champ Data et un <strong>.ots</strong> réception dans le champ OpenTimestamps proof.")
     }
 }
 
@@ -577,7 +577,7 @@ function run_info(){
     if (Proof.data) {
         location.href = "./info/?"+bytesToHex(string2Bin(Proof.data));
     } else {
-        failure("To <strong>info</strong> you need to drop a file in the Data field and a <strong>.ots</strong> receipt in the OpenTimestamps proof field")
+        failure("Pour <strong>info</strong> vous devez déposer un fichier dans le champ Data et un <strong>.ots</strong> réception dans le champ OpenTimestamps proof.")
     }
 }
 
@@ -709,20 +709,20 @@ function message_info(showInfo){
 }
 
 function verifying(text){
-    message("VERIFYING", text, 'alert-info', true);
+    message("VÉRIFIER", text, 'alert-info', true);
 }
 function stamping(text){
-    message("STAMPING", text, 'alert-info', false);
+    message("ÉCHANTILLONNAGE", text, 'alert-info', false);
 }
 function hashing(text){
     message("HASHING", text, 'alert-info', false);
 }
 function success(text){
-    message("SUCCESS!", text, 'alert-success');
+    message("SUCCÈS!", text, 'alert-success');
 }
 function failure(text){
-    message("FAILURE!", text, 'alert-danger');
+    message("ÉCHEC!", text, 'alert-danger');
 }
 function warning(text){
-    message("WARNING!", text, 'alert-warning');
+    message("AVERTISSEMENT!", text, 'alert-warning');
 }
