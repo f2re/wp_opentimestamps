@@ -1,0 +1,120 @@
+/**
+ *
+ * CSS file for Opentimestamp plugin
+ * 
+ */
+
+
+/*
+ * dropzone
+ */
+.opentimestamp-plugin .drop-zone{
+  width: 100%;
+  background-color:#FAEEC5;
+  border-color:#948026;
+  border-radius: 0.5rem;
+  border-style: dashed;
+  border-width: 3px;
+  margin: 1rem 0;
+  padding: 2rem;
+  text-align:center;
+}
+.hash .fas{
+  font-size: 3rem;
+  color:#948026;
+}
+.hash {
+  color:gray;
+}
+.opentimestamp-plugin .drop-zone.hover{
+
+}
+
+.opentimestamp-plugin .filename{
+  font-weight: bold;
+  color:#948026;
+  margin-bottom: 1rem;
+}
+
+.opentimestamp-plugin .filesize{
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+.opentimestamp-plugin .hash{
+
+}
+
+/**
+ * alert
+ */
+
+.alert {
+    position: relative;
+    padding: .75rem 1.25rem;
+    margin-bottom: 1rem;
+    border: 1px solid 
+    transparent;
+        border-top-color: transparent;
+        border-right-color: transparent;
+        border-bottom-color: transparent;
+        border-left-color: transparent;
+    border-radius: .25rem;
+}
+
+.alert-heading {
+    color: inherit;
+}
+
+.alert h4{
+  font-size: 1.5rem;
+  margin:0;
+}
+
+.alert p{
+  margin-bottom:0;
+}
+
+.alert-success {
+    color: #155724;
+    background-color:#d4edda;
+    border-color:    #c3e6cb;
+}
+
+.alert-danger {
+    color: #721c24;
+    background-color:#f8d7da;
+    border-color:    #f5c6cb;
+}
+
+.alert-warning {
+    color: #856404;
+    background-color:#fff3cd;
+    border-color:  #ffeeba;
+}
+
+.alert-info {
+    color: #0c5460;
+    background-color:#d1ecf1;
+    border-color:    #bee5eb;
+}
+
+.alert-heading{
+  color: inherit;
+}
+
+.alert-success hr {
+    border-top-color:  #b1dfbb;
+}
+
+.alert hr {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    border: 0;
+        border-top-color: currentcolor;
+        border-top-style: none;
+        border-top-width: 0px;
+    border-top: 1px solid     rgba(0,0,0,.1);
+    border-top-color: rgba(0, 0, 0, 0.1);
+
+}
