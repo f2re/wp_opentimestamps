@@ -34,8 +34,8 @@ function opentimestamps_register_resources() {
   wp_register_script("opentimestamps-script", plugins_url("js/app.js", __FILE__), array(), "1.0", false);
   wp_register_style("opentimestamps-style", plugins_url("css/main.css", __FILE__), array(), "1.0", "all");
   
-  wp_register_script("font-awesome-js", "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/js/all.min.js", array(), "1", false);
-  wp_register_style("font-awesome-css", "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css", array(), "1.0", "all");
+  // wp_register_script("font-awesome-js", "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/js/all.min.js", array(), "1", false);
+  // wp_register_style("font-awesome-css", "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css", array(), "1.0", "all");
 
 
 }
@@ -56,8 +56,8 @@ function opentimestamps_shortcode($atts){
   wp_enqueue_script("opentimestamps-script");
   wp_enqueue_style("opentimestamps-style");
 
-  wp_enqueue_script("font-awesome-js");
-  wp_enqueue_style("font-awesome-css");
+  // wp_enqueue_script("font-awesome-js");
+  // wp_enqueue_style("font-awesome-css");
 
   $content = '<div class="opentimestamp-plugin" id="opentimestamp-plugin"> 
                 <div class="drop-zone" id="opentimestamp_document">
