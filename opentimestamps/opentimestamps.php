@@ -3,7 +3,7 @@
  * Plugin Name: Opentimestamps plugin
  * Plugin URI: https://github.com/f2re/wp_opentimestamps
  * Description: Plugin for add shortcode to upload opentimestamps files and verify it.
- * Version: 0.1
+ * Version: 0.3
  * Author: f2re
  * Author URI: https://github.com/f2re/
  * License: GPL2
