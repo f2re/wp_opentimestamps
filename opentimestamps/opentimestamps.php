@@ -23,6 +23,79 @@
 */
 // Start writing code after this line!
 
+/**
+ * generate language variable to translate all things 
+ * @param  string $lang [description]
+ * @return [type]       [description]
+ */
+function lang_variables( $lang='fr' ){
+  $_langs = [ 
+    // dont delete fr language
+    // to add language - add new assoc element on array
+    'fr' => [
+      // text on html
+      'select_to_upload' => 'Déposez ici un fichier à <b>tamponner</b><br>OU<br>un fichier de preuve <i>.ots</i> pour <b>vérifier</b>',
+      'bufer_file'       => 'Déposez ici le fichier tamponné',
+      // text on JS
+      'progress_success' => 'Création du reçu OpenTimestamps et début du téléchargement',
+      'unknown_cert'     => 'Type d\'attestation inconnu',
+      'warning'          => 'En attente d\'attestation',
+      'chain_replace'    => ' %chain% pâté de maisons %height% atteste l\'existence au %date% <br>',
+      'percent'          => 'Estampage',
+      'number'           => 'Nom inconnu',
+      'hash_type_filure' => 'Type de hachage non supporté',
+      'stamped'          => 'Stamped ',
+      'hash'             => ' hash: ',
+      'upload_original'  => 'Télécharger les données originales estampillées pour vérifier',
+      'verify'           => 'Verify',
+      'pour_stamp'       => 'Pour <strong>stamp</strong>vous devez déposer un fichier dans le champ Données',
+      'unsopported_type' => 'Type de hachage non supporté',
+      'no_files'         => 'Aucun fichier à vérifier ; téléchargez un fichier d\'abord',
+      'pour_verifer'     => 'Pour <strong>vérifier</strong>vous devez déposer un fichier dans le champ Data et un <strong>.ots</strong> réception dans le champ OpenTimestamps proof.',
+      'poour_info'       => 'Pour <strong>info</strong> vous devez déposer un fichier dans le champ Data et un <strong>.ots</strong> réception dans le champ OpenTimestamps proof.',
+      'msg_verify'       => 'VÉRIFIER',
+      'msg_ench'         => 'ÉCHANTILLONNAGE',
+      'msg_hashing'      => 'HASHING',
+      'msg_suc'          => 'SUCCÈS!',
+      'msg_no'           => 'ÉCHEC!',
+      'msg_warn'         => 'AVERTISSEMENT!',
+    ],
+    'en' =>[
+      // text on html
+      'select_to_upload' => '',
+      'bufer_file'       => '',
+      // text on JS
+      'progress_success' => '',
+      'unknown_cert'     => '',
+      'warning'          => '',
+      'chain_replace'    => '',
+      'percent'          => '',
+      'number'           => '',
+      'hash_type_filure' => '',
+      'stamped'          => '',
+      'hash'             => '',
+      'upload_original'  => '',
+      'verify'           => '',
+      'pour_stamp'       => '',
+      'unsopported_type' => '',
+      'no_files'         => '',
+      'pour_verifer'     => '',
+      'poour_info'       => '',
+      'msg_verify'       => '',
+      'msg_ench'         => '',
+      'msg_hashing'      => '',
+      'msg_suc'          => '',
+      'msg_no'           => '',
+      'msg_warn'         => '',
+    ]
+  ];
+
+  if (isset( $_langs[$lang] )){
+    return $_langs[$lang];
+  }
+  return $_langs['fr'];
+}
+
 // First we register our resources using the init hook
 function opentimestamps_register_resources() {
   wp_register_script("opentimestamps-application-script", plugins_url("js/application.js", __FILE__), array(), "1", false);
@@ -34,10 +107,6 @@ function opentimestamps_register_resources() {
   wp_register_script("opentimestamps-script", plugins_url("js/app.js", __FILE__), array(), "1.0", false);
   wp_register_style("opentimestamps-style", plugins_url("css/main.css", __FILE__), array(), "1.0", "all");
   
-  // wp_register_script("font-awesome-js", "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/js/all.min.js", array(), "1", false);
-  // wp_register_style("font-awesome-css", "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css", array(), "1.0", "all");
-
-
 }
 add_action( 'init', 'opentimestamps_register_resources' );
 
@@ -56,18 +125,19 @@ function opentimestamps_shortcode($atts){
   wp_enqueue_script("opentimestamps-script");
   wp_enqueue_style("opentimestamps-style");
 
-  // wp_enqueue_script("font-awesome-js");
-  // wp_enqueue_style("font-awesome-css");
+  $lang = lang_variables('fr');
 
+  // language script
+  $langscript = "<script> var opentimestampsLangs = ".json_encode($lang)." </script>";
+
+  // upload content
   $content = '<div class="opentimestamp-plugin" id="opentimestamp-plugin"> 
                 <div class="drop-zone" id="opentimestamp_document">
                   <span class="filename"></span>
                   <span class="filesize"></span>
                   <p class="hash">
                     <i class="fas fa-upload"></i><br>
-                    Déposez ici un fichier à <b>tamponner</b><br>
-                    OU<br>
-                    un fichier de preuve <i>.ots</i> pour <b>vérifier</b>
+                    '.$lang['select_to_upload'].'
                   </p>
                 </div>
                 <input id="opentimestamp_input" type="file" style="display:none">
@@ -75,7 +145,7 @@ function opentimestamps_shortcode($atts){
                   <span class="filename"></span>
                   <span class="filesize"></span>
                   <p class="hash">
-                    <br>Déposez ici le fichier tamponné
+                    <br>'.$lang['bufer_file'].'
                   </p>
                 </div>
                 <input id="opentimestamp_stamped_input" type="file" style="display:none">
@@ -92,7 +162,7 @@ function opentimestamps_shortcode($atts){
                 </div>
               </div>';
 
-  return $content;
+  return  $langscript.$content;
 }
 
 add_shortcode('opentimestamps-plugin', 'opentimestamps_shortcode');

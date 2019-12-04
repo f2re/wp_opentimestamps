@@ -24,7 +24,8 @@ function stamp(filename, hash, hashType) {
 		const timestampBytes = ctx.getOutput();
 		download(filename, timestampBytes);
 		Document.progressStop();
-		success('Création du reçu OpenTimestamps et début du téléchargement');
+        success(opentimestampsLangs['progress_success']);
+		// success('Création du reçu OpenTimestamps et début du téléchargement');
 	}).catch(err => {
 		console.log("err "+err);
 		Document.progressStop();
@@ -72,17 +73,20 @@ function upgrade_verify(ots, hash, hashType, filename) {
                 // check attestations
                 detachedOts.timestamp.allAttestations().forEach(attestation => {
                     if(attestation instanceof OpenTimestamps.Notary.UnknownAttestation){
-                    	warning('Type d\'attestation inconnu');
+                        warning(opentimestampsLangs['unknown_cert']);
+                    	// warning('Type d\'attestation inconnu');
                 	}
             	});
     		} else {
-                warning('En attente d\'attestation');
+                warning(opentimestampsLangs['warning']);
+                // warning('En attente d\'attestation');
 			}
 		} else {
 			var text = "";
 			Object.keys(results).map(chain => {
 				var date = moment(results[chain].timestamp * 1000).tz(moment.tz.guess()).format('YYYY-MM-DD z')
-                text += upperFirstLetter(chain) + ' pâté de maisons ' + results[chain].height + ' atteste l\'existence au ' + date + '<br>';
+                text += opentimestampsLangs['chain_replace'].replace( '%chain%',upperFirstLetter(chain) ).replace( '%height%', results[chain].height).replace('%date%', date);
+                // text += upperFirstLetter(chain) + ' pâté de maisons ' + results[chain].height + ' atteste l\'existence au ' + date + '<br>';
     		});
         	success(text);
 		}
@@ -276,7 +280,7 @@ var Document = {
 		if (self.percent > 100) {
 			self.percent = 100;
 		}
-		stamping(self.percent + ' %', 'Estampage')
+		stamping(self.percent + ' %', opentimestampsLangs['percent'])
 		}, 100);
 	},
 	progressStop : function(){
@@ -341,7 +345,7 @@ var Proof = {
 		if (this.filename) {
 			$(this.tagId+" .filename").html(this.filename);
 		} else {
-			$(this.tagId+" .filename").html("Nom inconnu");
+			$(this.tagId+" .filename").html( opentimestampsLangs['number']);
 		}
 		if (this.filesize) {
 			$(this.tagId+" .filesize").html(" " + humanFileSize(this.filesize, true));
@@ -352,18 +356,18 @@ var Proof = {
         if (Proof.data) {
             var hashType = Proof.getHashType().toUpperCase();
             if (!Hashes.getSupportedTypes().indexOf(hashType) === -1) {
-                failure("Type de hachage non supporté");
+                failure(opentimestampsLangs['hash_type_filure']);
                 return;
             }
             var hash = Proof.getHash();
-            $(this.tagId+" .hash").html("Stamped "+ hashType + " hash: " + hash);
+            $(this.tagId+" .hash").html( opentimestampsLangs['stamped'] + hashType + opentimestampsLangs['hash'] + hash);
 
             if (Document.exist()) {
                 // Document just uploaded
                 run_verification();
             } else {
                 // Document not uploaded
-                verifying("Télécharger les données originales estampillées pour vérifier");
+                verifying(opentimestampsLangs['upload_original']);
             }
         }
 	},
@@ -386,7 +390,7 @@ var Proof = {
 					self.percent = 100;
 				}
 				if(self.stopInterval == false) {
-                    verifying(self.percent + ' %', 'Verify')
+                    verifying(self.percent + ' %', opentimestampsLangs['verify'])
                 }
 			}, 100);
 	},
@@ -549,7 +553,7 @@ function run_stamping(){
     if (Hashes.get(hashType)) {
         stamp(Document.filename, Hashes.get(hashType), hashType);
     } else {
-        failure("Pour <strong>stamp</strong>vous devez déposer un fichier dans le champ Données");
+        failure(opentimestampsLangs['pour_stamp']);
     }
 }
 
@@ -559,17 +563,17 @@ function run_verification(){
 
         var hashType = Proof.getHashType().toUpperCase();
         if (!Hashes.getSupportedTypes().indexOf(hashType) === -1) {
-            failure("Type de hachage non supporté");
+            failure(opentimestampsLangs['unsopported_type']);
             return;
         }
         if (!Hashes.get(hashType)){
-            failure("Aucun fichier à vérifier ; téléchargez un fichier d'abord");
+            failure(opentimestampsLangs['no_files']);
             return;
         }
         Proof.upgraded = false;
         upgrade_verify(string2Bin(Proof.data), Hashes.get(hashType), hashType, Proof.filename);
     } else {
-        failure("Pour <strong>vérifier</strong>vous devez déposer un fichier dans le champ Data et un <strong>.ots</strong> réception dans le champ OpenTimestamps proof.")
+        failure(opentimestampsLangs['pour_verifer'])
     }
 }
 
@@ -577,7 +581,7 @@ function run_info(){
     if (Proof.data) {
         location.href = "./info/?"+bytesToHex(string2Bin(Proof.data));
     } else {
-        failure("Pour <strong>info</strong> vous devez déposer un fichier dans le champ Data et un <strong>.ots</strong> réception dans le champ OpenTimestamps proof.")
+        failure(opentimestampsLangs['poour_info'])
     }
 }
 
@@ -709,20 +713,20 @@ function message_info(showInfo){
 }
 
 function verifying(text){
-    message("VÉRIFIER", text, 'alert-info', true);
+    message(opentimestampsLangs["msg_verify"], text, 'alert-info', true);
 }
 function stamping(text){
-    message("ÉCHANTILLONNAGE", text, 'alert-info', false);
+    message(opentimestampsLangs["msg_ench"], text, 'alert-info', false);
 }
 function hashing(text){
-    message("HASHING", text, 'alert-info', false);
+    message(opentimestampsLangs["msg_hashing"], text, 'alert-info', false);
 }
 function success(text){
-    message("SUCCÈS!", text, 'alert-success');
+    message(opentimestampsLangs["msg_suc"], text, 'alert-success');
 }
 function failure(text){
-    message("ÉCHEC!", text, 'alert-danger');
+    message(opentimestampsLangs["msg_no"], text, 'alert-danger');
 }
 function warning(text){
-    message("AVERTISSEMENT!", text, 'alert-warning');
+    message(opentimestampsLangs["msg_warn"], text, 'alert-warning');
 }
